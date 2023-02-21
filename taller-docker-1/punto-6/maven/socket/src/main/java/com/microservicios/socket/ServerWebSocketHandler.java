@@ -24,9 +24,15 @@ public class ServerWebSocketHandler extends TextWebSocketHandler implements SubP
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
         String request = message.getPayload();
+        String rootUser = System.getProperty("user.name");
         logger.info("Server received: {}", request);
 
-        String response = String.format("Hola '%s'", HtmlUtils.htmlEscape(request));
+        if (rootUser!=request) {
+            String response = String.format("Hola '%s'", HtmlUtils.htmlEscape(request));
+        }else{
+            String response = String.format("Hola Administrador");
+        }
+
         logger.info("Server sends: {}", response);
         session.sendMessage(new TextMessage(response));
     }
