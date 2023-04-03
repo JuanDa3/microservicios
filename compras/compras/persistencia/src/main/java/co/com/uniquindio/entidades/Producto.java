@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -18,9 +20,16 @@ public class Producto {
     private Integer id;
     private String referencia;
     private String nombre;
-    private String precio;
-    @ManyToOne
-    private Compra idCompra;
+    private double precio;
+    private int stock;
+
+    @JoinTable(
+            name = "productos_compra",
+            joinColumns = @JoinColumn(name = "FK_PRODUCTO", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "FK_COMPRA", nullable = false)
+    )
+    @ManyToMany
+    private List<Compra> compras;
 
 
 }

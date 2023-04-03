@@ -1,7 +1,7 @@
 package co.com.uniquindio.rest;
 
 import co.com.uniquindio.entidades.Compra;
-import co.com.uniquindio.servicios.CompraServicio;
+import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
