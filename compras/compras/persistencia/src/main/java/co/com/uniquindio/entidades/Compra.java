@@ -3,12 +3,10 @@ package co.com.uniquindio.entidades;
 import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.enums.EnumMedioPago;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +14,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Compra {
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date fecha;
+    private LocalDate fecha;
 
     @Column(nullable = false)
     private String numeroFactura;
@@ -41,6 +41,21 @@ public class Compra {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @ManyToMany(mappedBy = "compras")
-    private List<Producto> productos;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "productos_compra",
+            joinColumns = @JoinColumn(name = "FK_PRODUCTO", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "FK_COMPRA", nullable = false)
+    )
+    private List<Producto> productos = new ArrayList<>();
+
+    public void agregarProducto(Producto producto) {
+        productos.add(producto);
+        producto.getCompras().add(this);
+    }
+
+    public void removerProducto(Producto producto) {
+        productos.remove(producto);
+        producto.getCompras().remove(this);
+    }
 }

@@ -1,11 +1,9 @@
 package co.com.uniquindio.entidades;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Producto {
 
     @Id
@@ -23,13 +22,7 @@ public class Producto {
     private double precio;
     private int stock;
 
-    @JoinTable(
-            name = "productos_compra",
-            joinColumns = @JoinColumn(name = "FK_PRODUCTO", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "FK_COMPRA", nullable = false)
-    )
-    @ManyToMany
-    private List<Compra> compras;
-
+    @ManyToMany(mappedBy = "productos")
+    private List<Compra> compras = new ArrayList<>();
 
 }

@@ -8,3 +8,5 @@ INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('Nintendo Switc
 INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('GoPro HERO10 Black', 1999966, 'G8732', 50000);
 INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('Google Nest Hub', 449990, 'G2341', 150000);
 INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('Microsoft Surface Laptop 4', 5399889, 'M6678', 50000);
+
+insert into usuario values(1,"contrasenia_super_segura","jdnaranjo@mail.com");

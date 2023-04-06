@@ -1,13 +1,10 @@
 package co.com.uniquindio.rest;
 
-import co.com.uniquindio.entidades.Compra;
+import co.com.uniquindio.dto.CompraDTO;
 import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/compras")
@@ -21,7 +18,7 @@ public class CompraRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?>crearCompra(Compra compra) throws Exception {
+    public ResponseEntity<?>crearCompra(@RequestBody CompraDTO compra) throws Exception {
         String mensajeGuardar = compraServicio.crearCompra(compra);
         return new ResponseEntity<>(mensajeGuardar, HttpStatus.CREATED);
     }
