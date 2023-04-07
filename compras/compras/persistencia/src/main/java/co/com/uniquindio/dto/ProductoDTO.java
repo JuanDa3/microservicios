@@ -2,6 +2,8 @@ package co.com.uniquindio.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,6 +14,6 @@ public class ProductoDTO {
     private Integer id;
     private String referencia;
     private String nombre;
-    private double precio;
+    private BigDecimal precio;
     private int cantidadCompra;
 }

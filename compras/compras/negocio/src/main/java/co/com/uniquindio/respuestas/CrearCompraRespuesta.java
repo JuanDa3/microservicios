@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Builder
 public class CrearCompraRespuesta implements Serializable {
     @JsonProperty("total_compra")
-    private double totalCompra;
+    private BigDecimal totalCompra;
     @JsonProperty("estado_compra")
     private EnumCompra estado;
     @JsonProperty("fecha_compra")

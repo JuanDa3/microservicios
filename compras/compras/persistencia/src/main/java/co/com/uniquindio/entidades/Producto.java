@@ -3,6 +3,7 @@ package co.com.uniquindio.entidades;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Producto {
     private Integer id;
     private String referencia;
     private String nombre;
-    private double precio;
+    private BigDecimal precio;
     private int stock;
 
     @ManyToMany(mappedBy = "productos")

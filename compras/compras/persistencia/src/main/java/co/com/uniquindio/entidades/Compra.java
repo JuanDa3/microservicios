@@ -5,6 +5,7 @@ import co.com.uniquindio.enums.EnumMedioPago;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Compra {
     private Integer id;
 
     @Column(nullable = false)
-    private double totalCompra;
+    private BigDecimal totalCompra;
 
     @Column(nullable = false)
     private EnumMedioPago medioPago;

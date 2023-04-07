@@ -12,8 +12,6 @@ import java.util.List;
 @ToString
 public class CompraDTO {
 
-    private int totalCompra;
-
     private EnumMedioPago medioPago;
 
     private UsuarioDTO usuario;

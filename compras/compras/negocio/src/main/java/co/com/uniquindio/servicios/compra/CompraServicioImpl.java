@@ -13,6 +13,7 @@ import co.com.uniquindio.repositorios.UsuarioRepo;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class CompraServicioImpl implements CompraServicio {
             List<Producto> listaProductos = verificarProductos(compra.getProductos());
 
             Compra guardarCompra = Compra.builder()
-                    .totalCompra(compra.getTotalCompra())
+                    .totalCompra(calcularTotalCompra(compra.getProductos()))
                     .medioPago(compra.getMedioPago())
                     .estado(EnumCompra.EN_PROCESO)
                     .fecha(fechaActual)
@@ -67,6 +68,7 @@ public class CompraServicioImpl implements CompraServicio {
                     .build();
 
             compraRepo.save(guardarCompra);
+
             crearCompraRespuesta =  CrearCompraRespuesta.builder()
                     .correoUsuario(usuario.getCorreo())
                     .numeroFactura(guardarCompra.getNumeroFactura())
@@ -75,6 +77,8 @@ public class CompraServicioImpl implements CompraServicio {
                     .fecha(guardarCompra.getFecha())
                     .productos(compra.getProductos())
                     .build();
+
+            actualizarStock(compra.getProductos());
 
         } else {
             throw new Exception("No se puede guardar como nulo");
@@ -135,6 +139,41 @@ public class CompraServicioImpl implements CompraServicio {
 
         }
         return listaProductos;
+    }
+
+    private void actualizarStock(List<ProductoDTO> productoDTOS){
+        for(ProductoDTO productoDTO: productoDTOS){
+            Optional<Producto> producto = productoRepo.findById(productoDTO.getId());
+
+            int stockActual = producto.get().getStock();
+            int compraProducto = productoDTO.getCantidadCompra();
+            producto.get().setStock(stockActual - compraProducto);
+
+            Producto productoActualizar = new Producto(
+                    producto.get().getId(),
+                    producto.get().getReferencia(),
+                    producto.get().getNombre(),
+                    producto.get().getPrecio(),
+                    producto.get().getStock(),
+                    producto.get().getCompras()
+                    );
+            productoRepo.save(productoActualizar);
+        }
+    }
+
+    private BigDecimal calcularTotalCompra(List<ProductoDTO> productoDTOS){
+        BigDecimal totalCompra = new BigDecimal(0);
+        for(ProductoDTO productoDTO: productoDTOS){
+            Optional<Producto> producto = productoRepo.findById(productoDTO.getId());
+
+            BigDecimal precio = producto.get().getPrecio();
+            BigDecimal cantidadCompra = BigDecimal.valueOf(productoDTO.getCantidadCompra());
+
+            totalCompra = totalCompra.add(precio.multiply(cantidadCompra));
+
+        }
+
+        return totalCompra;
     }
 
 }
