@@ -10,10 +10,7 @@ import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.repositorios.CompraRepo;
 import co.com.uniquindio.repositorios.ProductoRepo;
 import co.com.uniquindio.repositorios.UsuarioRepo;
-import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
-import co.com.uniquindio.respuestas.CrearCompraRespuesta;
-import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
-import co.com.uniquindio.respuestas.HistorialCompraRespuesta;
+import co.com.uniquindio.respuestas.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -39,8 +36,8 @@ public class CompraServicioImpl implements CompraServicio {
 
     @Override
     public CancelarCompraRespuesta cancelarCompra(Integer id) throws Exception {
-        Optional<Compra>compra = compraRepo.findById(id);
-        if(compra.get().getEstado().equals(EnumCompra.CANCELADO)){
+        Optional<Compra> compra = compraRepo.findById(id);
+        if (compra.get().getEstado().equals(EnumCompra.CANCELADO)) {
             throw new Exception("La compra ya se encuentra cancelada");
         }
 
@@ -59,9 +56,9 @@ public class CompraServicioImpl implements CompraServicio {
 
     @Override
     public EstadoCompraRespuesta estadoCompra(Integer id) throws Exception {
-        Optional<Compra>compra = compraRepo.findById(id);
+        Optional<Compra> compra = compraRepo.findById(id);
 
-        if(compra.isEmpty()){
+        if (compra.isEmpty()) {
             throw new Exception("La compra no existe");
         }
 
@@ -75,33 +72,33 @@ public class CompraServicioImpl implements CompraServicio {
 
         CrearCompraRespuesta crearCompraRespuesta;
 
-            LocalDate fechaActual = LocalDate.now();
-            String numeroFactura = String.valueOf(UUID.randomUUID()).replace("-", "");
-            Usuario usuario = verificarUsuario(compra.getUsuario());
-            List<Producto> listaProductos = verificarProductos(compra.getProductos());
+        LocalDate fechaActual = LocalDate.now();
+        String numeroFactura = String.valueOf(UUID.randomUUID()).replace("-", "");
+        Usuario usuario = verificarUsuario(compra.getUsuario());
+        List<Producto> listaProductos = verificarProductos(compra.getProductos());
 
-            Compra guardarCompra = Compra.builder()
-                    .totalCompra(calcularTotalCompra(compra.getProductos()))
-                    .medioPago(compra.getMedioPago())
-                    .estado(EnumCompra.EN_PROCESO)
-                    .fecha(fechaActual)
-                    .numeroFactura(numeroFactura)
-                    .productos(listaProductos)
-                    .usuario(usuario)
-                    .build();
+        Compra guardarCompra = Compra.builder()
+                .totalCompra(calcularTotalCompra(compra.getProductos()))
+                .medioPago(compra.getMedioPago())
+                .estado(EnumCompra.EN_PROCESO)
+                .fecha(fechaActual)
+                .numeroFactura(numeroFactura)
+                .productos(listaProductos)
+                .usuario(usuario)
+                .build();
 
-            compraRepo.save(guardarCompra);
+        compraRepo.save(guardarCompra);
 
-            crearCompraRespuesta =  CrearCompraRespuesta.builder()
-                    .correoUsuario(usuario.getCorreo())
-                    .numeroFactura(guardarCompra.getNumeroFactura())
-                    .totalCompra(guardarCompra.getTotalCompra())
-                    .estado(guardarCompra.getEstado())
-                    .fecha(guardarCompra.getFecha())
-                    .productos(compra.getProductos())
-                    .build();
+        crearCompraRespuesta = CrearCompraRespuesta.builder()
+                .correoUsuario(usuario.getCorreo())
+                .numeroFactura(guardarCompra.getNumeroFactura())
+                .totalCompra(guardarCompra.getTotalCompra())
+                .estado(guardarCompra.getEstado())
+                .fecha(guardarCompra.getFecha())
+                .productos(compra.getProductos())
+                .build();
 
-            actualizarStock(compra.getProductos());
+        actualizarStock(compra.getProductos());
 
         return crearCompraRespuesta;
     }
@@ -109,10 +106,10 @@ public class CompraServicioImpl implements CompraServicio {
     @Override
     public List<HistorialCompraRespuesta> historialCompras(String correo) throws Exception {
         Optional<List<Compra>> compras = compraRepo.historialCompras(correo);
-        List<HistorialCompraRespuesta>historialCompras = new ArrayList<>();
+        List<HistorialCompraRespuesta> historialCompras = new ArrayList<>();
 
         System.out.println(compras.get().size());
-        for(int i = 0; i < compras.get().size(); i++){
+        for (int i = 0; i < compras.get().size(); i++) {
             HistorialCompraRespuesta historialCompraRespuesta = HistorialCompraRespuesta.builder()
                     .totalCompra(compras.get().get(i).getTotalCompra())
                     .medioPago(compras.get().get(i).getMedioPago())
@@ -128,8 +125,19 @@ public class CompraServicioImpl implements CompraServicio {
     }
 
     @Override
-    public String detalleCompra(Integer id) throws Exception {
-        return null;
+    public DetalleCompraRespuesta detalleCompra(String numeroFactura) throws Exception {
+        Optional<Compra> compra = compraRepo.detalleCompra(numeroFactura);
+
+        return DetalleCompraRespuesta.builder()
+                .totalCompra(compra.get().getTotalCompra())
+                .medioPago(compra.get().getMedioPago())
+                .estado(compra.get().getEstado())
+                .fecha(compra.get().getFecha())
+                .numeroFactura(compra.get().getNumeroFactura())
+                .correoUsuario(compra.get().getUsuario().getCorreo())
+                .productos(compra.get().getProductos())
+                .build();
+
     }
 
     private Usuario verificarUsuario(UsuarioDTO usuarioDTO) throws Exception {
@@ -160,7 +168,7 @@ public class CompraServicioImpl implements CompraServicio {
                 producto.setPrecio(productoDTO.getPrecio());
 
                 listaProductos.add(producto);
-            }else{
+            } else {
                 throw new Exception("No se encuentra en inventario la cantidad de productos que desea comprar");
             }
 
@@ -168,8 +176,8 @@ public class CompraServicioImpl implements CompraServicio {
         return listaProductos;
     }
 
-    private void actualizarStock(List<ProductoDTO> productoDTOS){
-        for(ProductoDTO productoDTO: productoDTOS){
+    private void actualizarStock(List<ProductoDTO> productoDTOS) {
+        for (ProductoDTO productoDTO : productoDTOS) {
             Optional<Producto> producto = productoRepo.findById(productoDTO.getId());
 
             int stockActual = producto.get().getStock();
@@ -183,14 +191,14 @@ public class CompraServicioImpl implements CompraServicio {
                     producto.get().getPrecio(),
                     producto.get().getStock(),
                     producto.get().getCompras()
-                    );
+            );
             productoRepo.save(productoActualizar);
         }
     }
 
-    private BigDecimal calcularTotalCompra(List<ProductoDTO> productoDTOS){
+    private BigDecimal calcularTotalCompra(List<ProductoDTO> productoDTOS) {
         BigDecimal totalCompra = new BigDecimal(0);
-        for(ProductoDTO productoDTO: productoDTOS){
+        for (ProductoDTO productoDTO : productoDTOS) {
             Optional<Producto> producto = productoRepo.findById(productoDTO.getId());
 
             BigDecimal precio = producto.get().getPrecio();

@@ -2,10 +2,7 @@ package co.com.uniquindio.rest;
 
 import co.com.uniquindio.dto.CompraDTO;
 import co.com.uniquindio.entidades.Compra;
-import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
-import co.com.uniquindio.respuestas.CrearCompraRespuesta;
-import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
-import co.com.uniquindio.respuestas.HistorialCompraRespuesta;
+import co.com.uniquindio.respuestas.*;
 import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +78,21 @@ public class CompraRestController {
 
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
-    //https://dominio.com/compras/historial/
-    //https://dominio.com/compras/detalle/idCompra
+
+    @GetMapping("/detalle/{numero-factura}")
+    public ResponseEntity<?>obtenerDetalleCompra(@PathVariable(name = "numero-factura") String numeroFactura){
+        Map<String, Object>respuesta = new HashMap<>();
+        try {
+            DetalleCompraRespuesta detalleCompraRespuesta = compraServicio.detalleCompra(numeroFactura);
+            respuesta.put("detalle compra", detalleCompraRespuesta);
+        } catch (Exception e) {
+            respuesta.put("error", e.getMessage());
+            return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
+
+    //https://dominio.com/compras/detalle/numerofactura
 
 }
