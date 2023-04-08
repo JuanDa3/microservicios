@@ -9,4 +9,4 @@ INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('GoPro HERO10 B
 INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('Google Nest Hub', 449990, 'G2341', 15);
 INSERT INTO producto (nombre, precio, referencia, stock) VALUES ('Microsoft Surface Laptop 4', 5399889, 'M6678', 50);
 
-insert into usuario values(1,"contrasenia_super_segura","jdnaranjo@mail.com");
+INSERT INTO usuario VALUES(1,"contrasenia_super_segura","jdnaranjo@mail.com");

@@ -2,6 +2,7 @@ package co.com.uniquindio.entidades;
 
 import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.enums.EnumMedioPago;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,7 @@ public class Compra {
     @Column(nullable = false)
     private String numeroFactura;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
@@ -45,8 +47,8 @@ public class Compra {
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "productos_compra",
-            joinColumns = @JoinColumn(name = "FK_PRODUCTO", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "FK_COMPRA", nullable = false)
+            joinColumns = @JoinColumn(name = "id_compra", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "id_producto", nullable = false)
     )
     private List<Producto> productos = new ArrayList<>();
 
@@ -59,4 +61,5 @@ public class Compra {
         productos.remove(producto);
         producto.getCompras().remove(this);
     }
+
 }

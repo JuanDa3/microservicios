@@ -1,5 +1,6 @@
 package co.com.uniquindio.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,8 @@ public class Producto {
     private BigDecimal precio;
     private int stock;
 
+    @JsonIgnore
+    @ToString.Exclude
     @ManyToMany(mappedBy = "productos")
     private List<Compra> compras = new ArrayList<>();
 

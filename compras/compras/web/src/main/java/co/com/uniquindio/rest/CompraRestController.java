@@ -1,6 +1,7 @@
 package co.com.uniquindio.rest;
 
 import co.com.uniquindio.dto.CompraDTO;
+import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
 import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class CompraRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?>crearCompra(@RequestBody CompraDTO compra) throws Exception {
+    public ResponseEntity<?>crearCompra(@RequestBody CompraDTO compra) {
         Map<String, Object>respuesta = new HashMap<>();
         CrearCompraRespuesta respuestaTransaccion;
         try{
@@ -36,5 +37,25 @@ public class CompraRestController {
 
         return new ResponseEntity<>(respuesta, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/cancelarCompra/{idCompra}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?>cancelarCompra(@PathVariable int idCompra) {
+        Map<String, Object>respuesta = null;
+        try {
+            respuesta = new HashMap<>();
+            CancelarCompraRespuesta respuestaTransaccion = compraServicio.cancelarCompra(idCompra);
+            respuesta.put("respuesta", respuestaTransaccion);
+        } catch (Exception e) {
+            respuesta.put("error",e.getMessage());
+        }
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
+
+
+
+    //https://dominio.com/compras/estado/idCompra
+    //https://dominio.com/compras/historial/
+    //https://dominio.com/compras/detalle/idCompra
 
 }

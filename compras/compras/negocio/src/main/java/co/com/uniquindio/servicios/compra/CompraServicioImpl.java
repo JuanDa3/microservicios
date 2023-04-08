@@ -10,6 +10,7 @@ import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.repositorios.CompraRepo;
 import co.com.uniquindio.repositorios.ProductoRepo;
 import co.com.uniquindio.repositorios.UsuarioRepo;
+import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +36,23 @@ public class CompraServicioImpl implements CompraServicio {
     }
 
     @Override
-    public String cancelarCompra(Integer id) throws Exception {
-        System.out.println(cambiarEstadoCompra(id));
-        cambiarEstadoCompra(id);
-        return null;
+    public CancelarCompraRespuesta cancelarCompra(Integer id) throws Exception {
+        Optional<Compra>compra = compraRepo.findById(id);
+        if(compra.get().getEstado().equals(EnumCompra.CANCELADO)){
+            throw new Exception("La compra ya se encuentra cancelada");
+        }
+
+        compra.get().setEstado(EnumCompra.CANCELADO);
+
+        compraRepo.save(compra.get());
+
+        return CancelarCompraRespuesta.builder()
+                .correoUsuario(compra.get().getUsuario().getCorreo())
+                .totalCompra(compra.get().getTotalCompra())
+                .numeroFactura(compra.get().getNumeroFactura())
+                .estado(compra.get().getEstado())
+                .fecha(compra.get().getFecha())
+                .build();
     }
 
     @Override
@@ -96,17 +110,8 @@ public class CompraServicioImpl implements CompraServicio {
         return null;
     }
 
-    private Optional<Compra> cambiarEstadoCompra(Integer id) throws Exception {
-        Optional<Compra> compraActual = compraRepo.findById(id);
-        if (compraActual.orElseThrow(() -> new Exception("la compra no existe")).getEstado().equals(EnumCompra.CANCELADO)) {
-            throw new Exception("La compra ya se encuentra cancelada");
-        }
-        compraActual.get().setEstado(EnumCompra.CANCELADO);
-        return compraActual;
-    }
-
     private Usuario verificarUsuario(UsuarioDTO usuarioDTO) throws Exception {
-        Optional<Usuario> usuarioRegistrado = usuarioRepo.findById(usuarioDTO.getId());
+        Optional<Usuario> usuarioRegistrado = usuarioRepo.findByCorreo(usuarioDTO.getCorreo());
         if (usuarioRegistrado.isPresent()) {
             Usuario usuario = new Usuario();
             usuario.setId(usuarioDTO.getId());
