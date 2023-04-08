@@ -12,6 +12,7 @@ import co.com.uniquindio.repositorios.ProductoRepo;
 import co.com.uniquindio.repositorios.UsuarioRepo;
 import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
+import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -56,8 +57,16 @@ public class CompraServicioImpl implements CompraServicio {
     }
 
     @Override
-    public String estadoCompra(Integer id) throws Exception {
-        return null;
+    public EstadoCompraRespuesta estadoCompra(Integer id) throws Exception {
+        Optional<Compra>compra = compraRepo.findById(id);
+
+        if(compra.isEmpty()){
+            throw new Exception("La compra no existe");
+        }
+
+        return EstadoCompraRespuesta.builder()
+                .estado(compra.get().getEstado())
+                .build();
     }
 
     @Override

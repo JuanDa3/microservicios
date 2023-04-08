@@ -3,6 +3,7 @@ package co.com.uniquindio.rest;
 import co.com.uniquindio.dto.CompraDTO;
 import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
+import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
 import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ public class CompraRestController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?>crearCompra(@RequestBody CompraDTO compra) {
         Map<String, Object>respuesta = new HashMap<>();
         CrearCompraRespuesta respuestaTransaccion;
@@ -39,22 +39,31 @@ public class CompraRestController {
     }
 
     @DeleteMapping("/cancelarCompra/{idCompra}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?>cancelarCompra(@PathVariable int idCompra) {
-        Map<String, Object>respuesta = null;
+        Map<String, Object>respuesta = new HashMap<>();
         try {
-            respuesta = new HashMap<>();
             CancelarCompraRespuesta respuestaTransaccion = compraServicio.cancelarCompra(idCompra);
             respuesta.put("respuesta", respuestaTransaccion);
         } catch (Exception e) {
             respuesta.put("error",e.getMessage());
+            return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 
+    @GetMapping("/estado/{idCompra}")
+    public ResponseEntity<?>obtenerEstadoCompra(@PathVariable int idCompra){
+        Map<String, Object>respuesta = new HashMap<>();
+        try {
+            EstadoCompraRespuesta estadoCompraRespuesta = compraServicio.estadoCompra(idCompra);
+            respuesta.put("Estado de la compra", estadoCompraRespuesta);
+        } catch (Exception e) {
+            respuesta.put("error", e.getMessage());
+            return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
+        }
 
-
-    //https://dominio.com/compras/estado/idCompra
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
     //https://dominio.com/compras/historial/
     //https://dominio.com/compras/detalle/idCompra
 
