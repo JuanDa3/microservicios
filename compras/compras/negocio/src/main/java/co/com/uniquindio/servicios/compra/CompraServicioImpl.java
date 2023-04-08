@@ -13,6 +13,7 @@ import co.com.uniquindio.repositorios.UsuarioRepo;
 import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
 import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
+import co.com.uniquindio.respuestas.HistorialCompraRespuesta;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -74,7 +75,6 @@ public class CompraServicioImpl implements CompraServicio {
 
         CrearCompraRespuesta crearCompraRespuesta;
 
-        if (compra != null) {
             LocalDate fechaActual = LocalDate.now();
             String numeroFactura = String.valueOf(UUID.randomUUID()).replace("-", "");
             Usuario usuario = verificarUsuario(compra.getUsuario());
@@ -103,15 +103,28 @@ public class CompraServicioImpl implements CompraServicio {
 
             actualizarStock(compra.getProductos());
 
-        } else {
-            throw new Exception("No se puede guardar como nulo");
-        }
         return crearCompraRespuesta;
     }
 
     @Override
-    public List<Compra> historialCompras(Integer idUsuario) throws Exception {
-        return null;
+    public List<HistorialCompraRespuesta> historialCompras(String correo) throws Exception {
+        Optional<List<Compra>> compras = compraRepo.historialCompras(correo);
+        List<HistorialCompraRespuesta>historialCompras = new ArrayList<>();
+
+        System.out.println(compras.get().size());
+        for(int i = 0; i < compras.get().size(); i++){
+            HistorialCompraRespuesta historialCompraRespuesta = HistorialCompraRespuesta.builder()
+                    .totalCompra(compras.get().get(i).getTotalCompra())
+                    .medioPago(compras.get().get(i).getMedioPago())
+                    .estado(compras.get().get(i).getEstado())
+                    .fecha(compras.get().get(i).getFecha())
+                    .numeroFactura(compras.get().get(i).getNumeroFactura())
+                    .correoUsuario(compras.get().get(i).getUsuario().getCorreo())
+                    .productos(compras.get().get(i).getProductos())
+                    .build();
+            historialCompras.add(historialCompraRespuesta);
+        }
+        return historialCompras;
     }
 
     @Override

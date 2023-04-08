@@ -16,12 +16,14 @@ import java.util.List;
 @ToString
 public class Producto {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String referencia;
     private String nombre;
     private BigDecimal precio;
+    @JsonIgnore
     private int stock;
 
     @JsonIgnore

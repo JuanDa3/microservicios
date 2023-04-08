@@ -1,15 +1,18 @@
 package co.com.uniquindio.rest;
 
 import co.com.uniquindio.dto.CompraDTO;
+import co.com.uniquindio.entidades.Compra;
 import co.com.uniquindio.respuestas.CancelarCompraRespuesta;
 import co.com.uniquindio.respuestas.CrearCompraRespuesta;
 import co.com.uniquindio.respuestas.EstadoCompraRespuesta;
+import co.com.uniquindio.respuestas.HistorialCompraRespuesta;
 import co.com.uniquindio.servicios.compra.CompraServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,6 +60,20 @@ public class CompraRestController {
         try {
             EstadoCompraRespuesta estadoCompraRespuesta = compraServicio.estadoCompra(idCompra);
             respuesta.put("Estado de la compra", estadoCompraRespuesta);
+        } catch (Exception e) {
+            respuesta.put("error", e.getMessage());
+            return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
+
+    @GetMapping("/historial/{correo}")
+    public ResponseEntity<?>obtenerHistorialCompra(@PathVariable String correo){
+        Map<String, Object>respuesta = new HashMap<>();
+        try {
+            List<HistorialCompraRespuesta> historialCompras = compraServicio.historialCompras(correo);
+            respuesta.put("historial de compras", historialCompras);
         } catch (Exception e) {
             respuesta.put("error", e.getMessage());
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);

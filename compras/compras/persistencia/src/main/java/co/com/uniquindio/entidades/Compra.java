@@ -39,11 +39,14 @@ public class Compra {
     @Column(nullable = false)
     private String numeroFactura;
 
+    @JsonIgnore
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    @JsonIgnore
+    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "productos_compra",
