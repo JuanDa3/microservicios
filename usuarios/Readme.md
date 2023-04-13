@@ -21,3 +21,5 @@ Comandos
 docker run --name postgres-db -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 
 docker exec -it postgres-db bash
+
+docker start postgres-db

@@ -28,7 +28,7 @@ public class CompraRestController {
         CrearCompraRespuesta respuestaTransaccion;
         try{
             respuestaTransaccion = compraServicio.crearCompra(compra);
-            respuesta.put("transaccion exitosa, resumen", respuestaTransaccion);
+            respuesta.put("resumen", respuestaTransaccion);
             System.out.println(respuestaTransaccion);
         }catch (Exception e){
             respuesta.put("mensaje", e.getMessage());
