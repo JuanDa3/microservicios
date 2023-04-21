@@ -1,6 +1,5 @@
 package co.com.uniquindio.respuestas;
 
-import co.com.uniquindio.dto.ProductoDTO;
 import co.com.uniquindio.enums.EnumCompra;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,8 +9,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
 
 @Setter
 @AllArgsConstructor
@@ -24,7 +22,7 @@ public class CancelarCompraRespuesta implements Serializable {
     @JsonProperty("estado_compra")
     private EnumCompra estado;
     @JsonProperty("fecha_compra")
-    private LocalDate fecha;
+    private Date fecha;
     @JsonProperty("numero_factura")
     private String numeroFactura;
     @JsonProperty("correo_usuario")

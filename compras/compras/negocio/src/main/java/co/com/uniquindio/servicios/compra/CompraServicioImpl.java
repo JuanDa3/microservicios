@@ -14,11 +14,9 @@ import co.com.uniquindio.respuestas.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CompraServicioImpl implements CompraServicio {
@@ -72,7 +70,7 @@ public class CompraServicioImpl implements CompraServicio {
 
         CrearCompraRespuesta crearCompraRespuesta;
 
-        LocalDate fechaActual = LocalDate.now();
+        Date fechaActual = Date.from(Instant.now());
         String numeroFactura = String.valueOf(UUID.randomUUID()).replace("-", "");
         Usuario usuario = verificarUsuario(compra.getUsuario());
         List<Producto> listaProductos = verificarProductos(compra.getProductos());

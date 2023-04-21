@@ -3,12 +3,14 @@ package co.com.uniquindio.respuestas;
 import co.com.uniquindio.dto.ProductoDTO;
 import co.com.uniquindio.enums.EnumCompra;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -21,7 +23,7 @@ public class CrearCompraRespuesta implements Serializable {
     @JsonProperty("estado_compra")
     private EnumCompra estado;
     @JsonProperty("fecha_compra")
-    private LocalDate fecha;
+    private Date fecha;
     @JsonProperty("numero_factura")
     private String numeroFactura;
     @JsonProperty("correo_usuario")

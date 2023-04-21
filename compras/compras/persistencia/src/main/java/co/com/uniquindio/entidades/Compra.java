@@ -3,12 +3,13 @@ package co.com.uniquindio.entidades;
 import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.enums.EnumMedioPago;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class Compra {
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private LocalDate fecha;
+    private Date fecha;
 
     @Column(nullable = false)
     private String numeroFactura;

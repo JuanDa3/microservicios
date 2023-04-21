@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -29,7 +29,7 @@ public class DetalleCompraRespuesta {
     private EnumCompra estado;
 
     @JsonProperty("fecha_compra")
-    private LocalDate fecha;
+    private Date fecha;
 
     @JsonProperty("numero_factura")
     private String numeroFactura;

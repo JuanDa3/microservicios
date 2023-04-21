@@ -1,6 +1,5 @@
 package co.com.uniquindio.respuestas;
 
-import co.com.uniquindio.dto.ProductoDTO;
 import co.com.uniquindio.entidades.Producto;
 import co.com.uniquindio.enums.EnumCompra;
 import co.com.uniquindio.enums.EnumMedioPago;
@@ -11,7 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -29,7 +28,7 @@ public class HistorialCompraRespuesta {
     private EnumCompra estado;
 
     @JsonProperty("fecha_compra")
-    private LocalDate fecha;
+    private Date fecha;
 
     @JsonProperty("numero_factura")
     private String numeroFactura;
