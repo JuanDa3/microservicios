@@ -15,9 +15,7 @@
 	<name>modulo de compras</name>
 	<description>microservicio modulo de compras</description>
 	<modules>
-		<module>persistencia</module>
-        <module>negocio</module>
-        <module>web</module>
+		<module>microservicio</module>
     </modules>
 	<properties>
 		<java.version>11</java.version>
@@ -82,5 +80,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
