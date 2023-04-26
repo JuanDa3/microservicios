@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /compras:
+    post:
+      tags:
+      - compra-rest-controller
+      operationId: crearCompra
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompraDTO'
+        required: true
+      responses:
+        "201":
+          description: CREATED
+          content:
+            '*/*':
+              schema:
+                type: object
+  /productos:
+    get:
+      tags:
+      - producto-rest-controller
+      operationId: listarProductos
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /compras/historial/{correo}:
+    get:
+      tags:
+      - compra-rest-controller
+      operationId: obtenerHistorialCompra
+      parameters:
+      - name: correo
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /compras/estado/{idCompra}:
+    get:
+      tags:
+      - compra-rest-controller
+      operationId: obtenerEstadoCompra
+      parameters:
+      - name: idCompra
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /compras/detalle/{numero-factura}:
+    get:
+      tags:
+      - compra-rest-controller
+      operationId: obtenerDetalleCompra
+      parameters:
+      - name: numero-factura
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /compras/cancelarCompra/{idCompra}:
+    delete:
+      tags:
+      - compra-rest-controller
+      operationId: cancelarCompra
+      parameters:
+      - name: idCompra
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    CompraDTO:
+      type: object
+      properties:
+        medioPago:
+          type: string
+          enum:
+          - TARJETA
+          - EFECTIVO
+        usuario:
+          $ref: '#/components/schemas/UsuarioDTO'
+        productos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductoDTO'
+    ProductoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        referencia:
+          type: string
+        nombre:
+          type: string
+        precio:
+          type: number
+        cantidadCompra:
+          type: integer
+          format: int32
+    UsuarioDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        correo:
+          type: string
