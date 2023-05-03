@@ -7,6 +7,23 @@ servers:
   description: Generated server url
 paths:
   /compras:
+    get:
+      tags:
+      - compra-rest-controller
+      operationId: obtenerHistorialCompra
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: El recurso ha sido creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompraRestController'
     post:
       tags:
       - compra-rest-controller
@@ -19,11 +36,11 @@ paths:
         required: true
       responses:
         "201":
-          description: CREATED
+          description: El recurso ha sido creado exitosamente
           content:
-            '*/*':
+            application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/CompraRestController'
   /productos:
     get:
       tags:
@@ -36,13 +53,13 @@ paths:
             '*/*':
               schema:
                 type: object
-  /compras/historial/{correo}:
+  /compras/{numeroFactura}:
     get:
       tags:
       - compra-rest-controller
-      operationId: obtenerHistorialCompra
+      operationId: obtenerDetalleCompra
       parameters:
-      - name: correo
+      - name: numeroFactura
         in: path
         required: true
         schema:
@@ -51,10 +68,10 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                type: object
-  /compras/estado/{idCompra}:
+                $ref: '#/components/schemas/CompraRestController'
+  /compras/{idCompra}:
     get:
       tags:
       - compra-rest-controller
@@ -70,28 +87,9 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                type: object
-  /compras/detalle/{numero-factura}:
-    get:
-      tags:
-      - compra-rest-controller
-      operationId: obtenerDetalleCompra
-      parameters:
-      - name: numero-factura
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: object
-  /compras/cancelarCompra/{idCompra}:
+                $ref: '#/components/schemas/CompraRestController'
     delete:
       tags:
       - compra-rest-controller
@@ -104,12 +102,12 @@ paths:
           type: integer
           format: int32
       responses:
-        "200":
-          description: OK
+        "204":
+          description: El recurso ha sido eliminado exitosamente
           content:
-            '*/*':
+            application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/CompraRestController'
 components:
   schemas:
     CompraDTO:
@@ -134,8 +132,6 @@ components:
           format: int32
         referencia:
           type: string
-        nombre:
-          type: string
         precio:
           type: number
         cantidadCompra:
@@ -149,3 +145,10 @@ components:
           format: int32
         correo:
           type: string
+    CompraRestController:
+      type: object
+      properties:
+        compraServicio:
+          $ref: '#/components/schemas/CompraServicio'
+    CompraServicio:
+      type: object
