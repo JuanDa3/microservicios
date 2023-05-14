@@ -28,6 +28,7 @@ func initRouter() *gin.Engine {
 		{
 			secured.GET("ping", controllers.Ping)
 			secured.GET(":id", controllers.ObtenerUsuario)
+			secured.GET("", controllers.ObtenerUsuarios)
 		}
 	}
 	return router

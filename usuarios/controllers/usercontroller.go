@@ -44,9 +44,22 @@ func ObtenerUsuario(context *gin.Context) {
 
 	usuarioDTO := models.UsuarioDTO{
 		Id:       usuario.Id,
+		Name:     usuario.Name,
 		Username: usuario.Username,
 		Correo:   usuario.Correo,
 	}
 
 	context.JSON(http.StatusOK, gin.H{"user": &usuarioDTO})
+}
+
+func ObtenerUsuarios(context *gin.Context) {
+	var usuarios []models.UsuarioDTO
+	record := db.DB.Raw("select * from usuarios").Scan(&usuarios)
+
+	if record.Error != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": record.Error.Error()})
+		context.Abort()
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"users": &usuarios})
 }

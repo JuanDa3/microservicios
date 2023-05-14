@@ -8,9 +8,10 @@ import (
 type Usuario struct {
 	gorm.Model
 	Id          uint   `gorm:"not null;unique_index"`
-	Username    string `gorm:"not null"`
+	Name        string `gorm:"type:varchar(50);not null"`
+	Username    string `gorm:"not null;unique"`
 	Contrasenia string `gorm:"not null"`
-	Correo      string `gorm:"type:varchar(30);not null;unique_index"`
+	Correo      string `gorm:"type:varchar(30);not null;unique"`
 }
 
 func (usuario *Usuario) HashContrasenia(contrasenia string) error {
