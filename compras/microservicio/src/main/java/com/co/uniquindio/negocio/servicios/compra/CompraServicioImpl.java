@@ -33,6 +33,7 @@ public class CompraServicioImpl implements CompraServicio {
 
     @Override
     public CancelarCompraRespuesta cancelarCompra(Integer id) throws Exception {
+        //validar que el usuario sea el que hizo la compra
         Optional<Compra> compra = compraRepo.findById(id);
         if (compra.get().getEstado().equals(EnumCompra.CANCELADO)) {
             throw new Exception("La compra ya se encuentra cancelada");

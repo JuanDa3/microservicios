@@ -10,6 +10,14 @@ Feature: La API permite al usuario ver los productos disponibles, agregarlos a s
     Then obtengo un status code 201
     And  obtengo un resumen de la compra
 
+  Scenario: Yo como usuario registrado quiero cancelar una compra
+
+    Given soy un usuario registrado que necesita cancelar una compra
+
+    When selecciono el id de la compra 5
+    When invoco el servicio de cancelar compra
+    And obtengo un status code 204
+
 
 
 

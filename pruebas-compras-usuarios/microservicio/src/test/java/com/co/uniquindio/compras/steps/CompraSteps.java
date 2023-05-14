@@ -22,6 +22,8 @@ public class CompraSteps {
     private UsuarioDTO usuarioDTO = new UsuarioDTO();
     private CompraDTO compraDTO = new CompraDTO();
 
+    private int idCompra = 0;
+
     private  List<ProductoDTO> listaProductos=new ArrayList<>();
 
     private Response response;
@@ -45,11 +47,6 @@ public class CompraSteps {
        compraDTO.setMedioPago(EnumMedioPago.TARJETA);
     }
 
-    @When("agrego el numero de factura numeroFactura de la compra que quiero eliminar")
-    public void agregarNumeroFactura(){
-
-    }
-
     @And("obtengo un producto existente")
     public void seleccionaLosProductos() {
 
@@ -71,7 +68,7 @@ public class CompraSteps {
     }
 
     @Then("obtengo un status code {int}")
-    public void obtengoUnStatusCode201(int status) {
+    public void obtengoUnStatusCode(int status) {
         response.then().statusCode(status);
     }
 
@@ -80,12 +77,14 @@ public class CompraSteps {
         response.then().body("resumen", response->notNullValue());
     }
 
-    @And("invoco el servicio de eliminar compras")
-    public void invocoElServicioDeEliminarCompras() {
-
+    @When("selecciono el id de la compra {int}")
+    public void seleccionoElIdDeLaCompra(int idCompra) {
+        this.idCompra = idCompra;
     }
 
-    @And("obtengo un mensaje de confirmacion")
-    public void obtengoUnMensajeDeConfirmacion() {
+    @When("invoco el servicio de cancelar compra")
+    public void invocoElServicioDeCancelarCompra() {
+        baseURI = BASE_URL;
+        response = given().delete(baseURI+"/"+idCompra);
     }
 }
