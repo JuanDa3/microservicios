@@ -86,7 +86,7 @@ public class CompraRestController {
         Map<String, Object>respuesta = new HashMap<>();
         try {
             EstadoCompraRespuesta estadoCompraRespuesta = compraServicio.estadoCompra(idCompra);
-            respuesta.put("Estado de la compra", estadoCompraRespuesta);
+            respuesta.put("estadoCompra", estadoCompraRespuesta);
         } catch (Exception e) {
             respuesta.put("error", e.getMessage());
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
@@ -109,7 +109,7 @@ public class CompraRestController {
         Map<String, Object>respuesta = new HashMap<>();
         try {
             List<HistorialCompraRespuesta> historialCompras = compraServicio.historialCompras(email);
-            respuesta.put("historial de compras", historialCompras);
+            respuesta.put("historialCompras", historialCompras);
         } catch (Exception e) {
             respuesta.put("error", e.getMessage());
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
@@ -118,7 +118,7 @@ public class CompraRestController {
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 
-    @GetMapping("/{numeroFactura}")
+    @GetMapping("/facturas")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponse(
             responseCode = "200",
@@ -127,11 +127,11 @@ public class CompraRestController {
                     schema = @Schema(implementation = CompraRestController.class)
             )
     )
-    public ResponseEntity<?>obtenerDetalleCompra(@PathVariable(name = "numeroFactura") String numeroFactura){
+    public ResponseEntity<?>obtenerDetalleCompra(@RequestParam("numeroFactura") String numeroFactura){
         Map<String, Object>respuesta = new HashMap<>();
         try {
             DetalleCompraRespuesta detalleCompraRespuesta = compraServicio.detalleCompra(numeroFactura);
-            respuesta.put("detalle compra", detalleCompraRespuesta);
+            respuesta.put("detalleCompra", detalleCompraRespuesta);
         } catch (Exception e) {
             respuesta.put("error", e.getMessage());
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
